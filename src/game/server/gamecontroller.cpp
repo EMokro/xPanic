@@ -197,6 +197,7 @@ bool IGameController::OnEntity(int Index, vec2 Pos, int Layer, int Flags, int Nu
 
 void IGameController::EndRound()
 {
+	int WinnerID = -1;
 	if (m_Warmup || m_GameOverTick != -1)
 		return;
 
@@ -212,7 +213,10 @@ void IGameController::EndRound()
 			if (GameServer()->GetPlayerChar(m_LastZomb))
 				if(GameServer()->m_apPlayers[m_LastZomb]->m_AccData.m_UserID)
 				{
+					GameServer()->m_apPlayers[m_LastZomb]->GetCharacter()->ExperienceAdd(g_Config.m_SvWinReward, m_LastZomb);
 					GameServer()->m_apPlayers[m_LastZomb]->m_AccData.m_Winner++, GameServer()->m_apPlayers[m_LastZomb]->m_pAccount->Apply();
+
+					WinnerID = m_LastZomb;
 					if (g_Config.m_SvShowStatsEndRound)
 					{
 						float k = GameServer()->m_apPlayers[m_LastZomb]->m_AccData.m_Winner;
@@ -231,8 +235,8 @@ void IGameController::EndRound()
 			m_aTeamscore[TEAM_RED] = 100;
 			for (int i = 0; i < MAX_CLIENTS; i++)
 			{
-				if(!GameServer()->m_World.m_Paused && GameServer()->GetPlayerChar(i))
-					GameServer()->GetPlayerChar(i)->ExperienceAdd(1, i);
+				if(!GameServer()->m_World.m_Paused && GameServer()->GetPlayerChar(i) && i != WinnerID)
+					GameServer()->GetPlayerChar(i)->ExperienceAdd(g_Config.m_SvLooseReward, i);
 			}
 		}
 		
@@ -265,7 +269,7 @@ void IGameController::EndRound()
 					GameServer()->m_apPlayers[i]->m_Score += 10;
 				
 				if(!GameServer()->m_World.m_Paused && GameServer()->GetPlayerChar(i))
-					GameServer()->GetPlayerChar(i)->ExperienceAdd(5, i);
+					GameServer()->GetPlayerChar(i)->ExperienceAdd(g_Config.m_SvWinReward, i);
 			}
 		}
 	}

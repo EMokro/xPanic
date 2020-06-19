@@ -150,7 +150,9 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		}
 		else if (!strcmp(supgr, "ammo"))
 		{
-			if (m_pPlayer->m_AccData.m_Ammo >= 20)
+			if (m_pPlayer->m_AccData.m_Ammo >= 25 && m_pPlayer->m_AccData.m_PlayerState == 2)
+				return GameServer()->SendChatTarget(m_pPlayer->GetCID(), "Maximal ammo level!");
+			else if (m_pPlayer->m_AccData.m_Ammo >= 20)
 				return GameServer()->SendChatTarget(m_pPlayer->GetCID(), "Maximal ammo level!");
 			if (m_pPlayer->m_AccData.m_Money < 10)
 				return GameServer()->SendChatTarget(m_pPlayer->GetCID(), "You have not money counts. Need 10 money!");
@@ -631,19 +633,28 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 					str_format(aBuf, sizeof(aBuf), "Removed group %s for player '%s'", gname[GameServer()->m_apPlayers[cid2]->m_AccData.m_PlayerState], GameServer()->Server()->ClientName(cid2));
 					GameServer()->SendChatTarget(m_pPlayer->GetCID(), aBuf);
 					str_format(aBuf, sizeof(aBuf), "Your group removed %s!", gname[GameServer()->m_apPlayers[cid2]->m_AccData.m_PlayerState]);
+					GameServer()->m_apPlayers[cid2]->m_AccData.m_Ammo -= 5;
 					GameServer()->SendChatTarget(cid2, aBuf);
 					GameServer()->m_apPlayers[cid2]->m_AccData.m_PlayerState = 0;
 				}
 				else GameServer()->SendChatTarget(m_pPlayer->GetCID(), "This player already no in group!"); break;
 			default:
 				if(size > 3 || size < 0) return GameServer()->SendChatTarget(m_pPlayer->GetCID(), "Group ID not found!");
+				
+				if (size == 2) {
+					GameServer()->m_apPlayers[cid2]->m_AccData.m_Ammo += 25;
+					if (GameServer()->m_apPlayers[cid2]->m_AccData.m_Ammo > 25)
+						GameServer()->m_apPlayers[cid2]->m_AccData.m_Ammo = 25;
+				}
+
 				GameServer()->m_apPlayers[cid2]->m_AccData.m_PlayerState = size;
 				str_format(aBuf, sizeof(aBuf), "Set group %s for player '%s'", gname[GameServer()->m_apPlayers[cid2]->m_AccData.m_PlayerState], GameServer()->Server()->ClientName(cid2));
 				GameServer()->SendChatTarget(m_pPlayer->GetCID(), aBuf);
 				str_format(aBuf, sizeof(aBuf), "Your group set %s!", gname[GameServer()->m_apPlayers[cid2]->m_AccData.m_PlayerState]);
-				GameServer()->m_apPlayers[cid2]->m_pAccount->Apply();
 				GameServer()->SendChatTarget(cid2, aBuf); break;
 		}
+		GameServer()->m_apPlayers[cid2]->m_pAccount->Apply();
+
 		return;
 	}
 

@@ -260,7 +260,7 @@ void CCharacter::FireWeapon()
 							
 							GameServer()->CreateHammerHit(pClosest->m_Pos);
 							pClosest->Reset();
-							ExperienceAdd(1, m_pPlayer->GetCID());
+							// ExperienceAdd(1, m_pPlayer->GetCID());
 						}
 					}
 					pClosest = (CTurret *)pClosest->TypeNext();
@@ -290,7 +290,11 @@ void CCharacter::FireWeapon()
 				if (!IhammerRelTick)
 				{
 					GameServer()->CreatePlayerSpawn(m_Pos);
-					IhammerTick = 5 * Server()->TickSpeed();
+					if (GetPlayer()->m_AccData.m_PlayerState == 2)
+						IhammerTick = 6 * Server()->TickSpeed();
+					else
+						IhammerTick = 5 * Server()->TickSpeed();
+
 					IhammerRelTick = 30 * Server()->TickSpeed();
 				}
 
@@ -659,19 +663,30 @@ void CCharacter::TickPaused()
 
 void CCharacter::ExperienceAdd(int Exp, int ClientID)
 {
+	char aBuf[64];
 	CPlayer* pPlayer = GameServer()->m_apPlayers[ClientID];
+	
+	if (pPlayer->m_AccData.m_PlayerState == 2)
+		Exp *= 3;
+
+	str_format(aBuf, sizeof(aBuf), "%d. +%d Exp to %d ", ClientID, Exp, pPlayer->m_AccData.m_Exp);
+	dbg_msg("debug", aBuf);
+
 	if(m_pPlayer) pPlayer->m_AccData.m_Exp += m_pPlayer->m_AccData.m_Freeze?0:Exp;
 	else pPlayer->m_AccData.m_Exp += Exp;
-	
+
+
 	if (pPlayer->m_AccData.m_Exp >= pPlayer->m_AccData.m_Level && pPlayer && GameServer()->GetPlayerChar(ClientID))
 	{
 		m_EmoteType = EMOTE_HAPPY, m_EmoteStop = Server()->Tick() + Server()->TickSpeed();
 	}
 	else
 	{
-		char SendExp[64];
-		str_format(SendExp, sizeof(SendExp), "Exp %d/%d", pPlayer->m_AccData.m_Exp, pPlayer->m_AccData.m_Level);
-		GameServer()->SendChatTarget(ClientID, SendExp);
+		if (pPlayer->m_AccData.m_PlayerState == 2)
+			str_format(aBuf, sizeof(aBuf), "Exp %d/%d", pPlayer->m_AccData.m_Exp, pPlayer->m_AccData.m_Level);
+		else
+			str_format(aBuf, sizeof(aBuf), "Exp %d/%d", pPlayer->m_AccData.m_Exp, pPlayer->m_AccData.m_Level);
+		GameServer()->SendChatTarget(ClientID, aBuf);
 	}
 }
 
@@ -775,7 +790,7 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon)
 	{
 		if (From >= 0 && m_pPlayer->GetCID() != From && GameServer()->m_apPlayers[From])
 		{
-			ExperienceAdd(3 + m_pPlayer->m_AccData.m_Level / 40 * g_Config.m_SvExpBonus, From);
+			ExperienceAdd(g_Config.m_SvPlayerKillExp + m_pPlayer->m_AccData.m_Level / 40 * g_Config.m_SvExpBonus, From);
 			GameServer()->m_apPlayers[From]->m_KillingSpree++;
 			if(GameServer()->m_apPlayers[From]->m_KillingSpree == g_Config.m_SvKillingSpree)
 			{

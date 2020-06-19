@@ -146,6 +146,10 @@ MACRO_CONFIG_INT(SvInactiveKickTime, sv_inactivekick_time, 0, 0, 1000, CFGFLAG_S
 
 MACRO_CONFIG_INT(SvRegStartLevel, sv_register_start_lvl, 1, 1, 200, CFGFLAG_SERVER, "Start level register")
 MACRO_CONFIG_INT(SvExpBonus, sv_exp_bonus, 1, 1, 60, CFGFLAG_SERVER, "Bonus server")
+MACRO_CONFIG_INT(SvZombieKillExp, sv_zombie_killexp, 1, 0, 100, CFGFLAG_SERVER, "Bonus server")
+MACRO_CONFIG_INT(SvPlayerKillExp, sv_player_killexp, 3, 0, 100, CFGFLAG_SERVER, "Bonus server")
+MACRO_CONFIG_INT(SvWinReward, sv_win_reward, 5, 0, 100, CFGFLAG_SERVER, "Bonus server")
+MACRO_CONFIG_INT(SvLooseReward, sv_win_reward, 1, 0, 100, CFGFLAG_SERVER, "Bonus server")
 MACRO_CONFIG_INT(SvDestroyWall, sv_destroywall, 1, 0, 1, CFGFLAG_SERVER, "Crash wall")
 MACRO_CONFIG_INT(SvChatDestroyWall, sv_chat_destroywall, 1, 0, 1, CFGFLAG_SERVER, "Chat crash wall")
 MACRO_CONFIG_INT(SvStrictSpectateMode, sv_strict_spectate_mode, 0, 0, 1, CFGFLAG_SERVER, "Restricts information in spectator mode")

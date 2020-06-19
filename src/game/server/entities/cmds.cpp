@@ -641,6 +641,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 				str_format(aBuf, sizeof(aBuf), "Set group %s for player '%s'", gname[GameServer()->m_apPlayers[cid2]->m_AccData.m_PlayerState], GameServer()->Server()->ClientName(cid2));
 				GameServer()->SendChatTarget(m_pPlayer->GetCID(), aBuf);
 				str_format(aBuf, sizeof(aBuf), "Your group set %s!", gname[GameServer()->m_apPlayers[cid2]->m_AccData.m_PlayerState]);
+				GameServer()->m_apPlayers[cid2]->m_pAccount->Apply();
 				GameServer()->SendChatTarget(cid2, aBuf); break;
 		}
 		return;

@@ -669,9 +669,6 @@ void CCharacter::ExperienceAdd(int Exp, int ClientID)
 	if (pPlayer->m_AccData.m_PlayerState == 2)
 		Exp *= 3;
 
-	str_format(aBuf, sizeof(aBuf), "%d. +%d Exp to %d ", ClientID, Exp, pPlayer->m_AccData.m_Exp);
-	dbg_msg("debug", aBuf);
-
 	if(m_pPlayer) pPlayer->m_AccData.m_Exp += m_pPlayer->m_AccData.m_Freeze?0:Exp;
 	else pPlayer->m_AccData.m_Exp += Exp;
 
@@ -683,9 +680,9 @@ void CCharacter::ExperienceAdd(int Exp, int ClientID)
 	else
 	{
 		if (pPlayer->m_AccData.m_PlayerState == 2)
-			str_format(aBuf, sizeof(aBuf), "Exp %d/%d", pPlayer->m_AccData.m_Exp, pPlayer->m_AccData.m_Level);
+			str_format(aBuf, sizeof(aBuf), "Exp +%d %d/%d", Exp, pPlayer->m_AccData.m_Exp, pPlayer->m_AccData.m_Level);
 		else
-			str_format(aBuf, sizeof(aBuf), "Exp %d/%d", pPlayer->m_AccData.m_Exp, pPlayer->m_AccData.m_Level);
+			str_format(aBuf, sizeof(aBuf), "Exp +%d %d/%d", Exp, pPlayer->m_AccData.m_Exp, pPlayer->m_AccData.m_Level);
 		GameServer()->SendChatTarget(ClientID, aBuf);
 	}
 }

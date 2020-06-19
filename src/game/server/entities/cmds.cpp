@@ -21,7 +21,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		LastChat();		
 		if(GameServer()->m_World.m_Paused) return GameServer()->SendChatTarget(m_pPlayer->GetCID(), "Please wait end round!");
 		
-		char Username[256], Password[256];
+		char Username[256], Password[256], aBuf[64];
 		if(sscanf(Msg->m_pMessage, "/login %s %s", Username, Password) != 2) 
 			return GameServer()->SendChatTarget(m_pPlayer->GetCID(), "Use: /login <username> <password>");
 		
@@ -37,7 +37,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		LastChat();
 		if(GameServer()->m_World.m_Paused)  return GameServer()->SendChatTarget(m_pPlayer->GetCID(), "Please wait end round!");
 		
-		char Username[256], Password[256];
+		char Username[256], Password[256], aBuf[64];
 		if(sscanf(Msg->m_pMessage, "/register %s %s", Username, Password) != 2) 
 			return GameServer()->SendChatTarget(m_pPlayer->GetCID(), "Use /register <username> <password>'");
 		
@@ -392,6 +392,8 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/pm - send personal message to player");
 		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/cmdlist - commands server");
 		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/vip - get info vip status");
+		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/supervip - get info supervip status");
+		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/ultimatevip - get info ultimatevip status");
 		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/turret info - info about turrets");
 		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/levels - info about level");
 		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/shop - shop score tees");
@@ -460,15 +462,16 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 	else if(!strcmp(Msg->m_pMessage, "/rules"))
 	{
 		LastChat();
-		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "rule 1 dont farm");
-		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "rule 2 dont insult");
-		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "rule 3 dont share acc");
-		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "rule 4 dont talk about other servers");
-		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "rule 5 dont use bots");
-		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "rule 6 dont teamkill");
-		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "rule 7 dont sell accounts");
-		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "rule 8 no selfkill");
-		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "rule 9 everyone who use bugs");
+		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "rule 1 nope can sell");
+		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "rule 2 dont farm (freeze acc)");
+		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "rule 3 dont insult (mute/ban 1-7 day)");
+		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "rule 4 dont share acc(only when agree)(freeze acc)");
+		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "rule 5 dont talk about other servers(ip ban)");
+		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "rule 6 dont use bots(perma ban)");
+		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "rule 7 dont teamkill (ban 1-7 day");
+		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "rule 8 dont sell accounts (perma ban)");
+		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "rule 9 no selfkill");
+		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "rule 10 everyone who use bugs (freeze + ban)");
 		return;
 	}
 	else if (!strcmp(Msg->m_pMessage, "/heart"))

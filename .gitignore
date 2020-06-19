@@ -8,5 +8,6 @@ config.lua
 bam
 autoexec.cfg
 accounts/**
+data/maps/**
 src/game/generated/**
 DDNet-Server

@@ -7,6 +7,16 @@
 #include <engine/shared/config.h>
 #include "account.h"
 
+#if defined(CONF_FAMILY_WINDOWS)
+	#include <tchar.h>
+	#include <direct.h>
+#endif
+#if defined(CONF_FAMILY_UNIX)
+	#include <sys/types.h>
+	#include <fcntl.h>
+	#include <unistd.h>
+#endif
+
 
 CAccount::CAccount(CPlayer *pPlayer, CGameContext *pGameServer)
 {
@@ -112,6 +122,7 @@ void CAccount::Register(char *Username, char *Password)
 	if(Exists(Username))
 		return GameServer()->SendChatTarget(m_pPlayer->GetCID(), "Account already exists.");
 
+	#if defined(CONF_FAMILY_UNIX)
 	char Filter[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.-_";
 	char *p = strpbrk(Username, Filter);
 	if(!p)
@@ -120,7 +131,21 @@ void CAccount::Register(char *Username, char *Password)
 		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "A - Z, a - z, 0 - 9, . - _");
 		return;
 	}
+	#endif
 	
+	#if defined(CONF_FAMILY_WINDOWS)
+	static TCHAR * ValidChars = _T("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.-_");
+	if (_tcsspnp(Username, ValidChars))
+	{
+		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "Don't use invalid chars for username!");
+		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "A - Z, a - z, 0 - 9, . - _");
+		return;
+	}
+
+	if(mkdir("accounts"))
+		dbg_msg("account", "Account folder created!");
+	#endif
+
 	str_format(aBuf, sizeof(aBuf), "accounts/%s.acc", Username);
 
 	FILE *Accfile;

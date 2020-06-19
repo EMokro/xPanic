@@ -496,6 +496,10 @@ void IGameController::Tick()
 			}
 		}
 	}
+
+	if (Server()->Tick() % 30000 == 0) { // every 10 min
+		GameServer()->SendChat(-1, GameServer()->CHAT_ALL, "Visit our Discord Server https://discord.gg/ZpDu8G");
+	}
 }
 
 bool IGameController::IsTeamplay() const {

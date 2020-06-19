@@ -1,0 +1,4 @@
+until /root/teeworlds-xpanic-master/DDNet-Server; do
+echo "DDNet-Server crashed with exit code $?" >&2
+sleep 1
+done

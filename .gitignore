@@ -1,0 +1,12 @@
+bam.exe 
+.vs/
+.bam
+*.exe
+*.o
+*.pyc
+config.lua
+bam
+autoexec.cfg
+accounts/**
+src/game/generated/**
+DDNet-Server

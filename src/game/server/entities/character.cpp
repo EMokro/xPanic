@@ -260,7 +260,7 @@ void CCharacter::FireWeapon()
 							
 							GameServer()->CreateHammerHit(pClosest->m_Pos);
 							pClosest->Reset();
-							// ExperienceAdd(1, m_pPlayer->GetCID());
+							ExperienceAdd(g_Config.m_SvExpKillTrurret, m_pPlayer->GetCID());
 						}
 					}
 					pClosest = (CTurret *)pClosest->TypeNext();
@@ -790,7 +790,7 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon)
 	{
 		if (From >= 0 && m_pPlayer->GetCID() != From && GameServer()->m_apPlayers[From])
 		{
-			ExperienceAdd(g_Config.m_SvPlayerKillExp + m_pPlayer->m_AccData.m_Level / 40 * g_Config.m_SvExpBonus, From);
+			ExperienceAdd(g_Config.m_SvExpKillPlayer + m_pPlayer->m_AccData.m_Level / 40 * g_Config.m_SvExpBonus, From);
 			GameServer()->m_apPlayers[From]->m_KillingSpree++;
 			if(GameServer()->m_apPlayers[From]->m_KillingSpree == g_Config.m_SvKillingSpree)
 			{

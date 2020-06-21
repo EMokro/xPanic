@@ -84,7 +84,17 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 
 		return;
 	}	
-	
+	else if (!strcmp(Msg->m_pMessage, "/upgrreset"))
+	{
+		LastChat();
+		if (!m_pPlayer->m_AccData.m_UserID) return GameServer()->SendChatTarget(m_pPlayer->GetCID(), "You are not logged in! Type '/account' for more information!");
+		m_pPlayer->m_AccData.m_Money += m_pPlayer->m_AccData.m_Handle + m_pPlayer->m_AccData.m_Dmg + m_pPlayer->m_AccData.m_Health + m_pPlayer->m_AccData.m_Ammoregen + 10 * m_pPlayer->m_AccData.m_Ammo;
+		m_pPlayer->m_AccData.m_Handle = 0;
+		m_pPlayer->m_AccData.m_Dmg = 0;
+		m_pPlayer->m_AccData.m_Health = 0;
+		m_pPlayer->m_AccData.m_Ammoregen = 0;
+		m_pPlayer->m_AccData.m_Ammo = 0;
+	}
 	else if (!strncmp(Msg->m_pMessage, "/upgr", 5))
 	{
 		LastChat();
@@ -633,7 +643,8 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 					str_format(aBuf, sizeof(aBuf), "Removed group %s for player '%s'", gname[GameServer()->m_apPlayers[cid2]->m_AccData.m_PlayerState], GameServer()->Server()->ClientName(cid2));
 					GameServer()->SendChatTarget(m_pPlayer->GetCID(), aBuf);
 					str_format(aBuf, sizeof(aBuf), "Your group removed %s!", gname[GameServer()->m_apPlayers[cid2]->m_AccData.m_PlayerState]);
-					GameServer()->m_apPlayers[cid2]->m_AccData.m_Ammo -= 5;
+					if (GameServer()->m_apPlayers[cid2]->m_AccData.m_PlayerState == 2)
+						GameServer()->m_apPlayers[cid2]->m_AccData.m_Ammo -= 5;
 					GameServer()->SendChatTarget(cid2, aBuf);
 					GameServer()->m_apPlayers[cid2]->m_AccData.m_PlayerState = 0;
 				}
@@ -642,7 +653,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 				if(size > 3 || size < 0) return GameServer()->SendChatTarget(m_pPlayer->GetCID(), "Group ID not found!");
 				
 				if (size == 2) {
-					GameServer()->m_apPlayers[cid2]->m_AccData.m_Ammo += 25;
+					GameServer()->m_apPlayers[cid2]->m_AccData.m_Ammo += 5;
 					if (GameServer()->m_apPlayers[cid2]->m_AccData.m_Ammo > 25)
 						GameServer()->m_apPlayers[cid2]->m_AccData.m_Ammo = 25;
 				}

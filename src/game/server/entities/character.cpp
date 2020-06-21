@@ -73,9 +73,9 @@ bool CCharacter::Spawn(CPlayer *pPlayer, vec2 Pos)
 	else if (pPlayer->GetTeam() == TEAM_BLUE) m_Core.m_ActiveWeapon = WEAPON_GUN;
 
 	m_Core.m_Jumps = 2 + pPlayer->m_JumpsShop;
-	if (pPlayer->m_AccData.m_Level >= 50 && pPlayer->m_AccData.m_Level <= 99) m_mAmmo = 20 + pPlayer->m_AccData.m_Ammo;
-	else if (pPlayer->m_AccData.m_Level >= 100) m_mAmmo = 30 + pPlayer->m_AccData.m_Ammo;
-	else m_mAmmo = 10 + pPlayer->m_AccData.m_Ammo;
+	if (pPlayer->m_AccData.m_Level >= 50 && pPlayer->m_AccData.m_Level <= 99) m_mAmmo = 20;
+	else if (pPlayer->m_AccData.m_Level >= 100) m_mAmmo = 30;
+	else m_mAmmo = 10;
 
 	GameServer()->SendBroadcast("", pPlayer->GetCID());
 	return true;

@@ -94,6 +94,9 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		m_pPlayer->m_AccData.m_Health = 0;
 		m_pPlayer->m_AccData.m_Ammoregen = 0;
 		m_pPlayer->m_AccData.m_Ammo = 0;
+
+		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "Your upgrades has been reseted.");
+		return;
 	}
 	else if (!strncmp(Msg->m_pMessage, "/upgr", 5))
 	{

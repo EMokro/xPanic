@@ -147,7 +147,7 @@ void CTurret::Fire()
 		case WEAPON_GUN:
 		{
 			ExperienceTAdd();
-			new CProjectile(GameWorld(), WEAPON_GUN, m_Owner, ProjStartPos, Direction, (int)(Server()->TickSpeed()*GameServer()->Tuning()->m_GunLifetime), 2+GameServer()->m_apPlayers[m_Owner]->m_AccData.m_TurretDmg/5, 0, 22, -1, WEAPON_GUN);
+			new CProjectile(GameWorld(), WEAPON_GUN, m_Owner, ProjStartPos, Direction, (int)(Server()->TickSpeed()*GameServer()->Tuning()->m_GunLifetime), 2+GameServer()->m_apPlayers[m_Owner]->m_AccData.m_TurretDmg/8, 0, 15, -1, WEAPON_GUN);
 			GameServer()->CreateSound(m_Pos, SOUND_GUN_FIRE);
 			m_ReloadTick = 3600 * Server()->TickSpeed() / (1000 + GameServer()->m_apPlayers[m_Owner]->m_AccData.m_TurretSpeed * 40), m_Ammo--;
 		}break;
@@ -163,7 +163,7 @@ void CTurret::Fire()
 			{
 				GameServer()->CreateHammerHit(pTarget->m_Pos);
 				
-				pTarget->TakeDamage(Direction * 2, 800 + GameServer()->m_apPlayers[m_Owner]->m_AccData.m_TurretDmg*2, m_Owner, WEAPON_HAMMER);
+				pTarget->TakeDamage(Direction * 1.5, 800 + GameServer()->m_apPlayers[m_Owner]->m_AccData.m_TurretDmg * 1.5, m_Owner, WEAPON_HAMMER);
 				SavePosion = m_Pos;
 				m_ReloadTick = 800;	
 				return;
@@ -234,7 +234,7 @@ void CTurret::Fire()
 				a += Spreading[i + 16];
 				float v = 1 - (absolute(i) / (float)ShotSpread) / 2;
 				float Speed = GameServer()->m_apPlayers[m_Owner]->m_AccData.m_TurretLevel > 25 ? 1.0f : mix((float)GameServer()->Tuning()->m_ShotgunSpeeddiff, 1.0f, v);
-				new CProjectile(GameWorld(), WEAPON_SHOTGUN, m_Owner, ProjStartPos, vec2(cosf(a), sinf(a))*Speed, (int)(Server()->TickSpeed()*1.5), 1+GameServer()->m_apPlayers[m_Owner]->m_AccData.m_TurretDmg/15, 0, 1, -1, WEAPON_SHOTGUN);
+				new CProjectile(GameWorld(), WEAPON_SHOTGUN, m_Owner, ProjStartPos, vec2(cosf(a), sinf(a))*Speed, (int)(Server()->TickSpeed()*1.5), 1+GameServer()->m_apPlayers[m_Owner]->m_AccData.m_TurretDmg/20, 0, 1, -1, WEAPON_SHOTGUN);
 
 			}
 			ExperienceTAdd();

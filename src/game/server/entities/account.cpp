@@ -111,6 +111,15 @@ void CAccount::Login(char *Username, char *Password)
 	}
 
 	GameServer()->SendChatTarget(m_pPlayer->GetCID(), "Successfully logged in! Have fun while playing!");
+
+	// change values cuz new restrictions
+	if (m_pPlayer->m_AccData.m_TurretSpeed > 50) {
+		m_pPlayer->m_AccData.m_TurretMoney += m_pPlayer->m_AccData.m_TurretSpeed - 50;
+		str_format(aBuf, sizeof aBuf, "The new max level for turret speed is 50. You got %d turretmoney back.", m_pPlayer->m_AccData.m_TurretSpeed - 50);
+		GameServer()->SendChatTarget(m_pPlayer->GetCID(), aBuf);
+		m_pPlayer->m_AccData.m_TurretSpeed = 50;
+		Apply();
+	}
 }
 
 void CAccount::Register(char *Username, char *Password)

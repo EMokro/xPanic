@@ -232,7 +232,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 			if(m_pPlayer->m_AccData.m_TurretDmg > 100)
 				return GameServer()->SendChatTarget(m_pPlayer->GetCID(), "Maximal turret damage level!");		
 			if(m_pPlayer->m_AccData.m_TurretMoney <= 0)
-				return GameServer()->SendChatTarget(m_pPlayer->GetCID(), "You have not turret money counts!");
+				return GameServer()->SendChatTarget(m_pPlayer->GetCID(), "Not enough money");
 			
 			m_pPlayer->m_AccData.m_TurretMoney--, m_pPlayer->m_AccData.m_TurretDmg++;
 			str_format(andg, sizeof(andg), "Your turret's damage is upgraded, now it is: %d", m_pPlayer->m_AccData.m_TurretDmg);
@@ -242,10 +242,10 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		}			
 		else if(!strcmp(supgr, "speed"))
 		{
-			if(m_pPlayer->m_AccData.m_TurretSpeed >= 500)
+			if(m_pPlayer->m_AccData.m_TurretSpeed >= 50)
 				return GameServer()->SendChatTarget(m_pPlayer->GetCID(), "Maximal turret speed level!");		
 			if(m_pPlayer->m_AccData.m_TurretMoney <= 0)
-				return GameServer()->SendChatTarget(m_pPlayer->GetCID(), "You have not turret money counts!");
+				return GameServer()->SendChatTarget(m_pPlayer->GetCID(), "Not enough money");
 			
 			m_pPlayer->m_AccData.m_TurretMoney--, m_pPlayer->m_AccData.m_TurretSpeed++;
 			str_format(andg, sizeof(andg), "Your turret's speed is upgraded, now it is: %d", m_pPlayer->m_AccData.m_TurretSpeed);
@@ -258,7 +258,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 			if (m_pPlayer->m_AccData.m_TurretAmmo >= 100)
 				return GameServer()->SendChatTarget(m_pPlayer->GetCID(), "Maximal turret ammo level!");
 			if (m_pPlayer->m_AccData.m_TurretMoney <= 0)
-				return GameServer()->SendChatTarget(m_pPlayer->GetCID(), "You have not turret money counts!");
+				return GameServer()->SendChatTarget(m_pPlayer->GetCID(), "Not enough money");
 
 			m_pPlayer->m_AccData.m_TurretMoney--, m_pPlayer->m_AccData.m_TurretAmmo++;
 			str_format(andg, sizeof(andg), "Your turret's gun is upgraded, now it is: %d", m_pPlayer->m_AccData.m_TurretAmmo);
@@ -271,7 +271,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 			if (m_pPlayer->m_AccData.m_TurretShotgun >= 75)
 				return GameServer()->SendChatTarget(m_pPlayer->GetCID(), "Maximal turret ammoregen level!");
 			if (m_pPlayer->m_AccData.m_TurretMoney <= 0)
-				return GameServer()->SendChatTarget(m_pPlayer->GetCID(), "You have not turret money counts!");
+				return GameServer()->SendChatTarget(m_pPlayer->GetCID(), "Not enough money");
 
 			m_pPlayer->m_AccData.m_TurretMoney--, m_pPlayer->m_AccData.m_TurretShotgun++;
 			str_format(andg, sizeof(andg), "Your turret's ammoregen is upgraded, now it is: %d", m_pPlayer->m_AccData.m_TurretShotgun);
@@ -284,7 +284,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 			if (m_pPlayer->m_AccData.m_TurretRange >= 200)
 				return GameServer()->SendChatTarget(m_pPlayer->GetCID(), "Maximal turret range level!");
 			if (m_pPlayer->m_AccData.m_TurretMoney <= 0)
-				return GameServer()->SendChatTarget(m_pPlayer->GetCID(), "You have not turret money counts!");
+				return GameServer()->SendChatTarget(m_pPlayer->GetCID(), "Not enough money");
 
 			m_pPlayer->m_AccData.m_TurretMoney--, m_pPlayer->m_AccData.m_TurretRange++;
 			str_format(andg, sizeof(andg), "Your turret's range is upgraded, now it is: %d", m_pPlayer->m_AccData.m_TurretRange);

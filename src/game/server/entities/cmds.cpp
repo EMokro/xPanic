@@ -215,13 +215,9 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 			return;
 		}
 
-		dbg_msg("debug", "money %i, exp %i, time %i", Money, Exp, Time);
-
 		GameServer()->m_EventTimer = Time * 60;
 		GameServer()->m_EventMoney = Money;
 		GameServer()->m_EventExp = Exp;
-
-		dbg_msg("debug", "money %i, exp %i, time %i", GameServer()->m_EventMoney, GameServer()->m_EventExp, GameServer()->m_EventTimer);
 
 		GameServer()->SendChat(-1, CGameContext::CHAT_ALL, "~~ Event Started ~~");
 		str_format(aBuf, sizeof aBuf, "Money: x%d", Money);

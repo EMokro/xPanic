@@ -271,9 +271,13 @@ public:
 	virtual float PlayerJetpack();
 
 	void ResetTuning();
+	void GetTimeStr(int seconds, char *Buf, int size);
 
 	int m_ChatResponseTargetID;
 	int m_ChatPrintCBIndex;
+	int m_EventMoney = 1;
+	int m_EventExp = 1;
+	int m_EventTimer;
 };
 
 inline int64_t CmaskAll() { return -1LL; }

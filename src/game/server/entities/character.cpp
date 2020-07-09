@@ -669,7 +669,10 @@ void CCharacter::ExperienceAdd(int Exp, int ClientID)
 	if (pPlayer->m_AccData.m_PlayerState == 2)
 		Exp *= 3;
 
-	if(m_pPlayer) pPlayer->m_AccData.m_Exp += m_pPlayer->m_AccData.m_Freeze?0:Exp;
+	if (GameServer()->m_EventTimer > 0)
+		Exp *= GameServer()->m_EventExp;
+
+	if (m_pPlayer) pPlayer->m_AccData.m_Exp += m_pPlayer->m_AccData.m_Freeze?0:Exp;
 	else pPlayer->m_AccData.m_Exp += Exp;
 
 

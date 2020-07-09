@@ -45,6 +45,9 @@ void CGameContext::Construct(int Resetting)
 		m_pVoteOptionHeap = new CHeap();
 		m_NumMutes = 0;
 	}
+
+	m_EventTimer = 0;
+
 	m_ChatResponseTargetID = -1;
 	m_aDeleteTempfile[0] = 0;
 }
@@ -590,6 +593,14 @@ void CGameContext::OnTick()
 		}
 	}
 
+	if (m_EventTimer > 0) {
+		if (Server()->Tick() % 50 == 0)
+			m_EventTimer--;
+	} else {
+		m_EventMoney = 0;
+		m_EventExp = 0;
+	}
+
 	for(int i = 0; i < m_NumMutes; i++)
 	{
 		if(m_aMutes[i].m_Expire <= Server()->Tick())
@@ -598,6 +609,7 @@ void CGameContext::OnTick()
 			m_aMutes[i] = m_aMutes[m_NumMutes];
 		}
 	}
+	
 	if(Server()->Tick() % (g_Config.m_SvAnnouncementInterval * Server()->TickSpeed() * 60) == 0)
 	{
 		char *Line = ((CServer *) Server())->GetAnnouncementLine(g_Config.m_SvAnnouncementFileName);
@@ -605,17 +617,17 @@ void CGameContext::OnTick()
 			SendChat(-1, CGameContext::CHAT_ALL, Line);
 	}
 
-#ifdef CONF_DEBUG
-	if(g_Config.m_DbgDummies)
-	{
-		for(int i = 0; i < g_Config.m_DbgDummies ; i++)
+	#ifdef CONF_DEBUG
+		if(g_Config.m_DbgDummies)
 		{
-			CNetObj_PlayerInput Input = {0};
-			Input.m_Direction = (i&1)?-1:1;
-			m_apPlayers[MAX_CLIENTS-i-1]->OnPredictedInput(&Input);
+			for(int i = 0; i < g_Config.m_DbgDummies ; i++)
+			{
+				CNetObj_PlayerInput Input = {0};
+				Input.m_Direction = (i&1)?-1:1;
+				m_apPlayers[MAX_CLIENTS-i-1]->OnPredictedInput(&Input);
+			}
 		}
-	}
-#endif
+	#endif
 }
 
 // Server hooks

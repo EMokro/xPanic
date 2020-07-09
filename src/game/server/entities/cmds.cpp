@@ -197,6 +197,69 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		}
 		else return GameServer()->SendChatTarget(m_pPlayer->GetCID(), "This type doesn't exist.");
 	}
+	else if(!strncmp(Msg->m_pMessage, "/startevent", 11) && GameServer()->Server()->IsAuthed(m_pPlayer->GetCID())) {
+		LastChat();
+		char aBuf[128];
+		int Money, Exp, Time;
+
+		if (sscanf(Msg->m_pMessage, "/startevent %i %i %i", &Money, &Exp, &Time) != 3) {
+			GameServer()->SendChatTarget(m_pPlayer->GetCID(), "Use /addevent <money> <exp> <time>");
+			return;
+		}
+
+		if ((Money < 2 || Money > 5) || (Exp < 2 || Exp > 5))	{
+			GameServer()->SendChatTarget(m_pPlayer->GetCID(), "Set a value between 2 and 5");
+			return;
+		} else if (Time < 0 || Time > 60) {
+			GameServer()->SendChatTarget(m_pPlayer->GetCID(), "Set a time between 1 and 60 minutes");
+			return;
+		}
+
+		dbg_msg("debug", "money %i, exp %i, time %i", Money, Exp, Time);
+
+		GameServer()->m_EventTimer = Time * 60;
+		GameServer()->m_EventMoney = Money;
+		GameServer()->m_EventExp = Exp;
+
+		dbg_msg("debug", "money %i, exp %i, time %i", GameServer()->m_EventMoney, GameServer()->m_EventExp, GameServer()->m_EventTimer);
+
+		GameServer()->SendChat(-1, CGameContext::CHAT_ALL, "~~ Event Started ~~");
+		str_format(aBuf, sizeof aBuf, "Money: x%d", Money);
+		GameServer()->SendChat(-1, CGameContext::CHAT_ALL, aBuf);
+		str_format(aBuf, sizeof aBuf, "Exp: x%d", Exp);
+		GameServer()->SendChat(-1, CGameContext::CHAT_ALL, aBuf);
+		str_format(aBuf, sizeof aBuf, "Time: %d minutes", Time);
+		GameServer()->SendChat(-1, CGameContext::CHAT_ALL, aBuf);
+		GameServer()->SendChat(-1, CGameContext::CHAT_ALL, "~~~~~~~~~~");
+
+		return;
+	}
+	else if(!strncmp(Msg->m_pMessage, "/stopevent", 10) && GameServer()->Server()->IsAuthed(m_pPlayer->GetCID())) {
+		LastChat();
+
+		GameServer()->m_EventTimer = 0;
+		GameServer()->SendChat(-1, CGameContext::CHAT_ALL, "Event stopped by an admin");
+		return;
+	}
+	else if(!strncmp(Msg->m_pMessage, "/eventinfo", 10)) {
+		LastChat();
+
+		char aBuf[256];
+
+		if (!GameServer()->m_EventTimer) {
+			GameServer()->SendChatTarget(m_pPlayer->GetCID(), "There is no event");
+		} else {
+			GameServer()->SendChatTarget(m_pPlayer->GetCID(), "~~ Eventinfo ~~");
+			str_format(aBuf, sizeof aBuf, "Money: x%d", GameServer()->m_EventMoney);
+			GameServer()->SendChatTarget(m_pPlayer->GetCID(), aBuf);
+			str_format(aBuf, sizeof aBuf, "Exp: x%d", GameServer()->m_EventExp);
+			GameServer()->SendChatTarget(m_pPlayer->GetCID(), aBuf);
+			str_format(aBuf, sizeof aBuf, "Time: %d seconds left", GameServer()->m_EventTimer);
+			GameServer()->SendChatTarget(m_pPlayer->GetCID(), aBuf);
+			GameServer()->SendChatTarget(m_pPlayer->GetCID(), "~~~~~~~~~~");
+		}
+		return;
+	}
 	else if(!strncmp(Msg->m_pMessage, "/turret", 7))
 	{
 		LastChat();
@@ -465,7 +528,8 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/rules, /help, /info - information");
 		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/stats, /upgr - upgrade system");
 		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/shop - shop score tees");
-		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/idlist - List IDs players");	
+		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/idlist - List IDs players");
+		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/eventinfo - check if there is an event running");	
 		if(m_pPlayer->m_AccData.m_PlayerState == 1)
 		{
 			GameServer()->SendChatTarget(m_pPlayer->GetCID(), "#This command police group");
@@ -630,8 +694,10 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		if (sscanf(Msg->m_pMessage, "/setgroup %d %d", &id, &size) != 2)
 		{
 			GameServer()->SendChatTarget(m_pPlayer->GetCID(), "Please use: /setgroup <id> <groupid>"); 
-			GameServer()->SendChatTarget(m_pPlayer->GetCID(), "Group ID: 0 - Removed, 1 - Police, 2 - VIP, 3 - Helper"); return;
+			GameServer()->SendChatTarget(m_pPlayer->GetCID(), "Group ID: 0 - Removed, 1 - Police, 2 - VIP, 3 - Helper");
+			return;
 		}
+		
 		int cid2 = clamp(id, 0, (int)MAX_CLIENTS - 1);
 		char gname[4][12] = {"", "police", "vip", "helper"}, aBuf[64];
 

@@ -170,6 +170,10 @@ MACRO_CONFIG_INT(SvSkinStealAction, sv_skinstealaction, 0, 0, 1, CFGFLAG_SERVER,
 
 MACRO_CONFIG_INT(SvSendVotesPerTick, sv_send_votes_per_tick, 5, 1, 15, CFGFLAG_SERVER, "Number of vote options being send per tick")
 
+// Event
+MACRO_CONFIG_INT(EventMaxAmount, event_max_amount, 5, 1, 50, CFGFLAG_SERVER, "Maximum amount an event can give")
+MACRO_CONFIG_INT(EventMaxTime, event_max_time, 1440, 1, 1440, CFGFLAG_SERVER, "Maximum time an event can run")
+
 // debug
 #ifdef CONF_DEBUG // this one can crash the server if not used correctly
 	MACRO_CONFIG_INT(DbgDummies, dbg_dummies, 0, 0, 15, CFGFLAG_SERVER, "")

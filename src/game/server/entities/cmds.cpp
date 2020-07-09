@@ -442,7 +442,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "/prefix = +5 ammo + Special Dmg & 5 For killing spree");
 		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "Vip costs 10€ once");
 		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "Payments: Paypal");
-		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "Discord: https://discord.com/invite/ZpDu8G");
+		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "Discord: https://discord.gg/jDVPNEA");
 		return;
 	}
 	else if (!strcmp(Msg->m_pMessage, "/info"))
@@ -450,7 +450,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 		LastChat();
 		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "~~~~~~~~ Welcome to info! ~~~~~~~~");
 		char aBuf[128];
-		str_format(aBuf, sizeof(aBuf), "Owner: %s / Discord: https://discord.com/invite/ZpDu8G", g_Config.m_SvOwnerName);
+		str_format(aBuf, sizeof(aBuf), "Owner: %s / Discord: https://discord.gg/jDVPNEA", g_Config.m_SvOwnerName);
 		GameServer()->SendChatTarget(m_pPlayer->GetCID(), aBuf);
 		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "Panic mod by Kurosio, helper: nope");
 		GameServer()->SendChatTarget(m_pPlayer->GetCID(), "~~~~~~~~ Welcome to info! ~~~~~~~~");

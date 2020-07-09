@@ -150,8 +150,6 @@ private:
 	//
 	bool m_Spawning;
 	int m_ClientID;
-	int m_Team;
-
 
 	// DDRace
 
@@ -168,6 +166,7 @@ public:
 	bool m_ShowAll;
 	bool m_FlagTrue;
 	bool m_SpecTeam;
+	int m_Team;
 	bool m_Afk;
 	int m_KillMe;
 

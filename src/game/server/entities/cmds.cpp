@@ -207,7 +207,7 @@ void CCmd::ChatCmd(CNetMsg_Cl_Say *Msg)
 			return;
 		}
 
-		if ((Money < 2 || Money > g_Config.m_EventMaxAmount) || (Exp < 2 || Exp > g_Config.m_EventMaxAmount))	{
+		if ((Money < 1 || Money > g_Config.m_EventMaxAmount) || (Exp < 1 || Exp > g_Config.m_EventMaxAmount))	{
 			GameServer()->SendChatTarget(m_pPlayer->GetCID(), "Set a value between 2 and 5");
 			return;
 		} else if (Time < 0 || Time > g_Config.m_EventMaxTime) {

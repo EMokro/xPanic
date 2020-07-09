@@ -408,6 +408,9 @@ void CPlayer::SetTeam(int Team, bool DoChatMsg)
 	if(m_Team == Team)
 		return;
 
+	if (Team == -1 && m_Team == TEAM_RED)
+		return GameServer()->SendBroadcast("Zombies cant join the spectator", m_ClientID);
+
 	if (!m_AccData.m_UserID)
 		return GameServer()->SendBroadcast("To start the game read /help.", m_ClientID);
 

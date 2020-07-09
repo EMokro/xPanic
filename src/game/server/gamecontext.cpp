@@ -225,6 +225,9 @@ void CGameContext::CallVote(int ClientID, const char *aDesc, const char *aCmd, c
 	if(!pPlayer)
 		return;
 
+	if (pPlayer->m_Team == TEAM_SPECTATORS)
+		return;
+
 	SendChat(-1, CGameContext::CHAT_ALL, aChatmsg);
 	StartVote(aDesc, aCmd, pReason);
 	pPlayer->m_Vote = 1;
@@ -596,9 +599,12 @@ void CGameContext::OnTick()
 	if (m_EventTimer > 0) {
 		if (Server()->Tick() % 50 == 0)
 			m_EventTimer--;
-	} else {
-		m_EventMoney = 0;
-		m_EventExp = 0;
+		
+		if (!m_EventTimer) {
+			m_EventMoney = 0;
+			m_EventExp = 0;
+			SendChat(-1, CHAT_ALL, "Event is over");
+		}
 	}
 
 	for(int i = 0; i < m_NumMutes; i++)
